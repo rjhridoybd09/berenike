@@ -1,0 +1,89 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  OCR STUDIO — PythonAnywhere Setup Guide
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1 — Upload the files
+─────────────────────────
+1. Login to pythonanywhere.com
+2. Go to "Files" tab
+3. Create a new folder called:  ocr_studio
+4. Upload these files into it:
+     ocr_studio/
+     ├── app.py
+     ├── wsgi.py
+     ├── requirements.txt
+     └── templates/
+         └── index.html
+
+   (Create the "templates" subfolder first, then upload index.html into it)
+
+
+STEP 2 — Install packages
+──────────────────────────
+1. Go to "Consoles" tab → click "Bash"
+2. Type this command and press Enter:
+
+   pip install --user flask google-generativeai Pillow Werkzeug
+
+
+STEP 3 — Create the Web App
+────────────────────────────
+1. Go to "Web" tab
+2. Click "Add a new web app" → click Next
+3. Choose "Flask" → choose Python 3.10 (or highest available)
+4. When asked for the Flask project path, enter:
+
+   /home/YOUR_USERNAME/ocr_studio/app.py
+
+   (Replace YOUR_USERNAME with your actual PythonAnywhere username)
+
+5. Click Next — the web app will be created
+
+
+STEP 4 — Fix the WSGI file
+────────────────────────────
+1. On the "Web" tab, scroll down to "Code" section
+2. Click the WSGI configuration file link (it looks like:
+   /var/www/YOUR_USERNAME_pythonanywhere_com_wsgi.py)
+3. DELETE all existing content in that file
+4. Paste this (replace YOUR_USERNAME with your username):
+
+─── PASTE THIS ─────────────────────────────────────
+import sys
+import os
+
+project_home = '/home/YOUR_USERNAME/ocr_studio'
+if project_home not in sys.path:
+    sys.path.insert(0, project_home)
+
+os.chdir(project_home)
+
+from app import app as application
+─────────────────────────────────────────────────────
+
+5. Click Save
+
+
+STEP 5 — Reload & Test
+────────────────────────
+1. Go back to "Web" tab
+2. Click the big green "Reload" button
+3. Click your website URL at the top (looks like: yourusername.pythonanywhere.com)
+4. You should see the OCR Studio page!
+5. Upload any image → click Extract → done ✓
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If you see an error page:
+→ On the "Web" tab, click "Error log" to see what went wrong
+→ Most common fix: make sure YOUR_USERNAME is correct in the WSGI file
+
+If Extract button does nothing:
+→ Make sure packages installed correctly (Step 2)
+→ Try reinstalling:  pip install --user google-generativeai
+
+If uploads folder error:
+→ In Bash console, run:  mkdir -p ~/ocr_studio/uploads
